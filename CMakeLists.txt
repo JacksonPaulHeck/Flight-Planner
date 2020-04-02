@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 project(S20-PA04-FlightPlanner)
 set (EXE_NAME FlightPlanner)
 
@@ -11,11 +11,8 @@ set (EXE_NAME FlightPlanner)
 #   set (input02 "train_target.csv")
 # etc....
 
-set (input01 "data.csv")
-set (input02 "")
-set (input03 "")
-set (input04 "")
-
+set (input01 "graphInput.csv")
+set(input02 "input.csv")
 #
 ##########################################
 
@@ -25,4 +22,4 @@ foreach(file IN LISTS input01 input02 input03 input04)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp)
+add_executable(${EXE_NAME} main.cpp JPString.cpp Driver.cpp)
