@@ -14,13 +14,17 @@ using namespace std;
 
 void parseInputFile(JPLinkedList<JPLinkedList<Cities>*> &, ifstream &);
 
+void parseRequested(JPLinkedList<Cities> &, ifstream &);
+
+void getOutput(JPLinkedList<JPLinkedList<Cities> *> &, JPLinkedList<Cities> &, JPLinkedList<JPLinkedList<JPString> *> &, ofstream &, JPStack & jpStack);
+
 void emptyList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, Cities &);
 
 void searchInList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, bool &);
 
 void addNewList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, bool &);
 
-void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &, JPStack &, Cities &);
+void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &, JPStack &, const Cities &, JPLinkedList<JPLinkedList<JPString>*> &);
 
 
 

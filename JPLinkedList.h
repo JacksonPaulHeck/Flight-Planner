@@ -35,6 +35,28 @@ public:
 
     ~JPLinkedList() { removeAll(); }
 
+    JPLinkedList(JPLinkedList<T> & listToCopy){
+        init();
+        if(!listToCopy.isEmpty()) {
+            JPNode<T>* copyCurr = listToCopy.head;
+            while(copyCurr != NULL){
+                append(copyCurr->data);
+                copyCurr = copyCurr->next;
+            }
+        }
+    }
+
+    JPLinkedList<T> & operator=(JPLinkedList<T> const & listToCopy){
+        init();
+        if(!listToCopy.isEmpty()) {
+            JPNode<T>* copyCurr = listToCopy.head;
+            while(copyCurr != NULL){
+                append(copyCurr->data);
+                copyCurr = copyCurr->next;
+            }
+        }
+    }
+
     void print() const;
 
     void clear() {

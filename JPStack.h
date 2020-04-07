@@ -76,6 +76,9 @@ public:
         }
         return false;
     }
+    JPLinkedList<JPString>* & save(){
+        return data;
+    }
 };
 
 
