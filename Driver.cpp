@@ -288,7 +288,7 @@ void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPLinkedList<Cit
         JPIterator<JPLinkedList<JPString> *> *jpIterator = outputList.getHeadIterator();
         if (jpIterator->nextNode()->data->getCurrValue() == jpIterator5->getNode()->data.getOrigin()) {
             while (jpIterator->nextNode() != nullptr) {
-                if (jpIterator->nextNode()->data->getCurrValue() == jpIterator5->getNode()->data.getDestination()) {
+                if (jpIterator->getNode()->data->getCurrValue() == jpIterator5->getNode()->data.getDestination()) {
                     cout << calculateTime(JPAdjList, *jpIterator->getNode()->data) << endl;
                 }
             }
