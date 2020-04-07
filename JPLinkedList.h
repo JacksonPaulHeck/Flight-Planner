@@ -2,12 +2,15 @@
 // Created by jacks on 3/26/2020.
 //
 #include "JPNode.h"
+#include "JPIterator.h"
 
 #ifndef S20_PA04_FLIGHTPLANNER_JPLINKEDLIST_H
 #define S20_PA04_FLIGHTPLANNER_JPLINKEDLIST_H
 
 template<typename T>
 class JPLinkedList {
+    friend class JPStack;
+
 private:
     JPNode<T> *head;
     JPNode<T> *tail;
@@ -64,42 +67,81 @@ public:
         return it;
     }
 
-    void moveToHead() {
+    void moveCurrToHead() {
         curr = head;
     }
 
-    void moveToTail() {
+    bool isEmpty(){
+        return head->next == nullptr;
+    }
+
+    void moveCurrToTail() {
         curr = tail;
     }
 
-    void moveToLeft() {
-        if (curr == head) {
-            return;
+    void moveCurrToLeft() {
+        if (curr != head) {
+            curr = curr->previous;
         }
-        JPNode<T> * temp = head;
-        while(temp->next != curr){
-            temp = temp->next;
-        }
-        curr = temp;
     }
-    void moveToRight() {
+
+    void moveCurrToRight() {
         if (curr != tail) {
             curr = curr->next;
         }
     }
-    int length() const{
+
+    int length(){
         return count;
     }
+
     void moveToPosition(int pos){
         curr = head;
         for(int i = 0; i < pos; i++){
             curr = curr->next;
         }
     }
-    const T& getValue()const{
+
+
+    JPIterator<T> *getHeadIterator()const{
+        return new JPIterator<T>(head);
+    }
+
+    JPIterator<T> *getCurrIterator()const{
+        return new JPIterator<T>(curr);
+    }
+
+    JPIterator<T> *getTailIterator()const{
+        return new JPIterator<T>(tail);
+    }
+
+    const T& getCurrValue()const{
         return curr->next->data;
     }
+
+    JPNode<T> *& getCurrNextNode(){
+        return curr->next;
+    }
+    JPNode<T> *& getCurrNode(){
+        return curr;
+    }
+
+
+    bool contains(const T& requested){
+        JPNode<T> tp = head->next;
+        while(tp != NULL){
+            if(tp->data == requested){
+                return true;
+            }
+            tp = tp -> next;
+        }
+        return false;
+    }
+
 };
+
+
+
 
 template<typename T>
 void JPLinkedList<T>::print() const {

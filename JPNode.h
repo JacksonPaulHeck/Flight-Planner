@@ -9,6 +9,9 @@
 
 template<typename T>
 class JPNode {
+    friend class JPStack;
+    template <class U> friend class JPLinkedList;
+    template <class E> friend class JPIterator;
 private:
     static JPNode<T> * freelist;
 public:

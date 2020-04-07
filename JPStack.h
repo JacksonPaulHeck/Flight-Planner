@@ -6,20 +6,24 @@
 #define S20_PA04_FLIGHTPLANNER_JPSTACK_H
 
 #include "JPLinkedList.h"
+#include "JPString.h"
 
-template<class T>
 class JPStack {
 private:
-    JPLinkedList<T> *data;
+    JPLinkedList<JPString> *data;
     int size;
 public:
     JPStack() {
-        data = new JPLinkedList<T>;
+        data = new JPLinkedList<JPString>;
         size = data->length();
     }
 
     ~JPStack() {
         clear();
+    }
+
+    bool isEmpty(){
+        return data->head->next == nullptr;
     }
 
     void clear() {
@@ -28,28 +32,49 @@ public:
         delete data;
     }
 
-    void push(const T &it) {
-        data->moveToHead();
+    void push(const JPString &it) {
+        data->moveCurrToHead();
         data->insert(it);
+        data->curr = data->head->next;
         size = data->length();
     }
 
-    T pop() {
+    JPString pop() {
         if (size > 0) {
-            data->moveToHead();
+            data->moveCurrToHead();
             size--;
             return data->remove();
         }
-        return NULL;
+        return JPString();
     }
 
-    const T &topValue() const {
-        data->moveToHead();
-        return data->getValue();
+    const JPString &peek() const {
+        data->moveCurrToHead();
+        return data->getCurrValue();
     }
 
     int length() const {
         return size;
+    }
+
+    void print(){
+        JPNode<JPString> * tp = data->head;
+        while(tp->next!= nullptr){
+            tp = tp->next;
+            std::cout << tp->data << "-->";
+        }
+        std::cout<< "|" << std::endl;
+    }
+
+    bool contains(const JPString& requestedOrigin){
+        JPNode<JPString> * tp = data->head->next;
+        while(tp != NULL){
+            if(tp->data == requestedOrigin){
+                return true;
+            }
+            tp = tp -> next;
+        }
+        return false;
     }
 };
 

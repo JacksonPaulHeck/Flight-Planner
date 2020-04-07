@@ -5,60 +5,12 @@
 #include "Driver.h"
 #include <sstream>
 
-void mainDriver() {
-    int i = 0;
-    int j = 1;
-    int k = 2;
-    int l = 3;
-
-    JPLinkedList<JPLinkedList<int> *> jpAdjList;
-    auto *jpLinkedList4 = new JPLinkedList<int>;
-    auto *jpLinkedList5 = new JPLinkedList<int>;
-
-    jpLinkedList4->append(i);
-    jpLinkedList4->append(k);
-    jpLinkedList4->append(j);
-    jpLinkedList4->append(l);
-    jpLinkedList4->append(l);
-    jpLinkedList4->append(j);
-
-    jpLinkedList5->append(l);
-    jpLinkedList5->append(j);
-    jpLinkedList5->append(j);
-    jpLinkedList5->append(k);
-    jpLinkedList5->append(l);
-    jpLinkedList5->append(j);
-    jpLinkedList5->append(j);
-    jpLinkedList5->append(k);
-
-    jpAdjList.append(jpLinkedList4);
-    jpAdjList.append(jpLinkedList5);
-    jpAdjList.append(jpLinkedList4);
-    jpAdjList.append(jpLinkedList5);
-    jpAdjList.append(jpLinkedList4);
-    jpAdjList.append(jpLinkedList4);
-    jpAdjList.append(jpLinkedList5);
-    jpAdjList.append(jpLinkedList5);
-
-
-    jpAdjList.moveToHead();
-    for (int m = 0; m < jpAdjList.length(); m++) {
-        jpAdjList.getValue()->print();
-        jpAdjList.moveToRight();
-    }
-
-
-    delete jpLinkedList4;
-    delete jpLinkedList5;
-
-}
-
-void parseInputFile(JPLinkedList<JPLinkedList<JPString> *> &JPAdjList, ifstream &inFile) {
+void parseInputFile(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, ifstream &inFile) {
     char *line = new char[80];
     char *origin = new char[20];
     char *dest = new char[20];
     char *cost = new char[20];
-    char *minutes = new char[20];
+    char *time = new char[20];
 
     inFile.getline(line, 80);
     int length = atoi(line);
@@ -69,25 +21,29 @@ void parseInputFile(JPLinkedList<JPLinkedList<JPString> *> &JPAdjList, ifstream 
             ss.getline(origin, 20, '|');
             ss.getline(dest, 20, '|');
             ss.getline(cost, 20, '|');
-            ss.getline(minutes, 20);
+            ss.getline(time, 20);
 
             JPString JPOrigin(origin);
             JPString JPDest(dest);
+            int c = atoi(cost);
+            int t = atoi(time);
+            Cities cities_Orig(JPOrigin, JPDest, c, t);
+            Cities cities_Dest(JPDest, JPOrigin, c, t);
 
             if (JPAdjList.length() == 0) {
-                emptyList(JPAdjList, JPOrigin, JPDest);
+                emptyList(JPAdjList, cities_Orig, cities_Dest);
             } else {
-                JPAdjList.moveToHead();
+                JPAdjList.moveCurrToHead();
                 bool isOrigin;
-                searchInList(JPAdjList, JPOrigin, JPDest, isOrigin = false);
-                JPAdjList.moveToHead();
+                searchInList(JPAdjList, cities_Orig, isOrigin = false);
+                JPAdjList.moveCurrToHead();
                 bool isDest;
-                searchInList(JPAdjList, JPDest, JPOrigin, isDest = false);
-                JPAdjList.moveToHead();
-                JPAdjList.getValue()->moveToHead();
-                addNewList(JPAdjList, JPOrigin, JPDest, isOrigin);
-                addNewList(JPAdjList, JPDest, JPOrigin, isDest);
-                JPAdjList.moveToRight();
+                searchInList(JPAdjList, cities_Dest, isDest = false);
+                JPAdjList.moveCurrToHead();
+                JPAdjList.getCurrValue()->moveCurrToHead();
+                addNewList(JPAdjList, cities_Orig, isOrigin);
+                addNewList(JPAdjList, cities_Dest, isDest);
+                JPAdjList.moveCurrToRight();
             }
         }
     }
@@ -96,42 +52,111 @@ void parseInputFile(JPLinkedList<JPLinkedList<JPString> *> &JPAdjList, ifstream 
     delete[] origin;
     delete[] dest;
     delete[] cost;
-    delete[] minutes;
+    delete[] time;
 }
 
-void emptyList(JPLinkedList<JPLinkedList<JPString> *> & JPAdjList, JPString & JPOrigin, JPString & JPDest) {
-    auto *jpLinkedList = new JPLinkedList<JPString>;
-    jpLinkedList->moveToHead();
-    jpLinkedList->insert(JPOrigin);
-    jpLinkedList->append(JPDest);
-    JPAdjList.moveToHead();
+void emptyList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, Cities & cities1, Cities & cities2) {
+    auto *jpLinkedList = new JPLinkedList<Cities>;
+    jpLinkedList->moveCurrToHead();
+    jpLinkedList->insert(cities1);
+    JPAdjList.moveCurrToHead();
     JPAdjList.insert(jpLinkedList);
-    auto *jpLinkedList1 = new JPLinkedList<JPString>;
-    jpLinkedList1->moveToHead();
-    jpLinkedList1->insert(JPDest);
-    jpLinkedList1->append(JPOrigin);
+    auto *jpLinkedList1 = new JPLinkedList<Cities>;
+    jpLinkedList1->moveCurrToHead();
+    jpLinkedList1->insert(cities2);
     JPAdjList.append(jpLinkedList1);
 }
 
-void searchInList(JPLinkedList<JPLinkedList<JPString> *> & JPAdjList, JPString & head, JPString & elem, bool & isThere){
+void searchInList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, Cities & head, bool &isThere) {
     for (int j = 0; j < JPAdjList.length(); j++) {
         isThere = false;
-        JPAdjList.getValue()->moveToHead();
-        if (JPAdjList.getValue()->getValue() == head) {
-            JPAdjList.getValue()->moveToHead();
-            JPAdjList.getValue()->append(elem);
+        JPAdjList.getCurrValue()->moveCurrToHead();
+        if (JPAdjList.getCurrValue()->getCurrValue().getOrigin() == head.getOrigin()) {
+            JPAdjList.getCurrValue()->moveCurrToHead();
+            JPAdjList.getCurrValue()->append(head);
             break;
         } else { isThere = true; }
-        JPAdjList.moveToRight();
+        JPAdjList.moveCurrToRight();
     }
 }
-void addNewList(JPLinkedList<JPLinkedList<JPString> *> & JPAdjList, JPString & head, JPString & elem, bool & isThere){
+
+void addNewList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, Cities &head, bool &isThere) {
     if (isThere) {
-        auto *jpLinkedList = new JPLinkedList<JPString>;
-        jpLinkedList->moveToHead();
+        auto *jpLinkedList = new JPLinkedList<Cities>;
+        jpLinkedList->moveCurrToHead();
         jpLinkedList->insert(head);
-        jpLinkedList->append(elem);
-        JPAdjList.moveToHead();
+        JPAdjList.moveCurrToHead();
         JPAdjList.insert(jpLinkedList);
+    }
+}
+
+int findHead(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, const JPString& origin){
+    JPIterator<JPLinkedList<Cities>*>* bigList = JPAdjList.getHeadIterator();
+    int i = 0;
+    while(bigList->nextNode() != NULL){
+        if(bigList->getNode()->data->getCurrValue().getOrigin() == origin){
+            delete bigList;
+            return i;
+        }
+        i++;
+    }
+    delete bigList;
+    return -1;
+}
+
+void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack &jpStack, Cities & requested) {
+    /*
+     * ITERATIVE BACKTRACKING PSEUDOCODE
+     * 1.  Push source to stack
+     * 2.  While stack not empty:
+     *
+     * 3.  Check if stack.top is dest
+     *      --Yes: store path & pop
+     *
+     *      --No:  for connection in stack.top:
+     *              is connection NULL?
+     *                  --Yes: pop stack.top & reset iter
+     *
+     *              is connection on stack?
+     *                  --Yes: continue, move iter
+     *                  --No:  push connection, jump to step 3 , move iter
+     *
+     */
+    JPAdjList.moveCurrToHead();
+    for(int i = 0; i < JPAdjList.length(); i++){
+        if(JPAdjList.getCurrValue()->getCurrValue().getOrigin() == requested.getOrigin()){
+            jpStack.push(JPAdjList.getCurrValue()->getCurrValue().getOrigin());
+            break;
+        }else {
+            JPAdjList.moveCurrToRight();
+        }
+    }
+    JPAdjList.moveCurrToHead();
+
+    for (int i = 0; i < JPAdjList.length(); i++) {
+        JPAdjList.getCurrValue()->moveCurrToHead();
+    }
+    JPAdjList.moveCurrToHead();
+
+    while (!jpStack.isEmpty()) {
+        if (jpStack.peek() == requested.getDestination()) {
+            jpStack.print();
+            jpStack.pop();
+        } else {
+            JPAdjList.moveToPosition(findHead(JPAdjList, jpStack.peek()));
+            for(int j = 0; j < JPAdjList.getCurrValue()->length(); j++) {
+                if (JPAdjList.getCurrValue()->getCurrNextNode() == nullptr) {
+                    jpStack.pop();
+                    JPAdjList.getCurrValue()->moveToPosition(1);
+                } else if (jpStack.contains(JPAdjList.getCurrValue()->getCurrValue().getDestination())) {
+                    JPAdjList.getCurrValue()->moveCurrToRight();
+                    continue;
+                } else {
+                    jpStack.push(JPAdjList.getCurrValue()->getCurrValue().getDestination());
+                    JPAdjList.getCurrValue()->moveCurrToRight();
+                    break;
+                }
+            }
+        }
     }
 }

@@ -1,24 +1,26 @@
 //
 // Created by jacks on 3/27/2020.
 //
-#include "JPStack.h"
-#include "JPLinkedList.h"
-#include "JPString.h"
 
 #ifndef S20_PA04_FLIGHTPLANNER_DRIVER_H
 #define S20_PA04_FLIGHTPLANNER_DRIVER_H
 
+#include "JPStack.h"
+#include "JPLinkedList.h"
+#include "JPIterator.h"
+#include "Cities.h"
+
 using namespace std;
 
-void mainDriver();
+void parseInputFile(JPLinkedList<JPLinkedList<Cities>*> &, ifstream &);
 
-void parseInputFile(JPLinkedList<JPLinkedList<JPString>*> &, ifstream &);
+void emptyList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, Cities &);
 
-void emptyList(JPLinkedList<JPLinkedList<JPString> *> &, JPString &, JPString &);
+void searchInList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, bool &);
 
-void searchInList(JPLinkedList<JPLinkedList<JPString> *> &, JPString &, JPString &, bool &);
+void addNewList(JPLinkedList<JPLinkedList<Cities> *> &, Cities &, bool &);
 
-void addNewList(JPLinkedList<JPLinkedList<JPString> *> &, JPString &, JPString &, bool &);
+void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &, JPStack &, Cities &);
 
 
 

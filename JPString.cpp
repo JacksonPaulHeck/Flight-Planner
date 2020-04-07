@@ -41,6 +41,7 @@ JPString::~JPString() {
 
 //Returns the size of the JPString
 int JPString::size() const {
+    if(this == nullptr){return 0;}
     return length;
 }
 
@@ -100,6 +101,11 @@ bool operator==(const JPString &jpString, const JPString &jpString1) {
 
 //Equality Comparison Operator
 bool operator==(const JPString &jpString, const char *jpString1) {
+    if(jpString1 == NULL && jpString.size() == 0){
+        return true;
+    }else if(jpString1 == NULL && jpString.size() > 0){
+        return false;
+    }
     return jpString == JPString(jpString1);
 }
 

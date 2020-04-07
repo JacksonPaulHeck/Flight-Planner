@@ -1,42 +1,46 @@
 #include <iostream>
 #include "Driver.h"
+
 using namespace std;
 
-int main(int argc, char** argv){
+
+
+
+
+
+int main(int argc, char **argv) {
 
     ifstream data(argv[1]);
     ifstream input(argv[2]);
     ofstream output(argv[3]);
 
-    JPLinkedList<JPLinkedList<JPString>*> JPAdjList;
+    JPLinkedList<JPLinkedList<Cities> *> JPAdjList;
+    JPStack jpStack;
 
-    //mainDriver();
+    JPString origin("Houston");
+    JPString destination("Chicago");
+    int cost;
+    int time;
+    Cities requested(origin, destination, cost, time);
+    Cities requested1(destination, origin, cost, time);
+
 
     parseInputFile(JPAdjList, data);
 
-    JPAdjList.moveToHead();
-    for(int i = 0; i < JPAdjList.length(); i++){
-        JPAdjList.getValue()->print();
-        JPAdjList.moveToRight();
+    JPIterator<JPLinkedList<Cities>*>* jpIterator = JPAdjList.getHeadIterator();
+    while(jpIterator->nextNode() != NULL) {
+        JPIterator<Cities>* jpIterator1 = jpIterator->getNode()->data->getHeadIterator();
+        while(jpIterator1->nextNode() != NULL) {
+            cout << jpIterator1->getNode()->data << "-->";
+        }
+        cout << "|" << endl;
+        delete jpIterator1;
     }
+    cout << "End of Listings \n" << endl;
 
-    JPStack<JPString> jpStack;
-
-    JPString jpString("JPString");
-    JPString jpString1("JPString1");
-    JPString jpString2("JPString2");
-
-    jpStack.push(jpString);
-    jpStack.push(jpString1);
-    jpStack.pop();
-    jpStack.push(jpString2);
-    jpStack.push(jpString1);
+    iterativeBacktrack(JPAdjList, jpStack, requested);
 
 
-    cout << jpStack.pop() << endl;
-    cout << jpStack.pop() << endl;
-    cout << jpStack.pop() << endl;
-
-
+    delete jpIterator;
     return 0;
 }
