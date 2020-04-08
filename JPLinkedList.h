@@ -38,10 +38,10 @@ public:
     JPLinkedList(JPLinkedList<T> & listToCopy){
         init();
         if(!listToCopy.isEmpty()) {
-            JPNode<T>* copyCurr = listToCopy.head;
-            while(copyCurr != NULL){
-                append(copyCurr->data);
-                copyCurr = copyCurr->next;
+            JPNode<T>* curr = listToCopy.head;
+            while(curr != NULL){
+                append(curr->data);
+                curr = curr->next;
             }
         }
     }

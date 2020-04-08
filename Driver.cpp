@@ -1,11 +1,11 @@
 //
-// Created by jacks on 3/27/2020.
+// Created by JP Heck on 3/27/2020.
 //
 
 #include "Driver.h"
 #include <sstream>
 
-void parseRequested(JPLinkedList<Cities> &requestedList, ifstream &inFile) {
+void parseRequested(JPVector<Cities> &requestedList, ifstream &inFile) {
     char *line = new char[80];
     char *origin = new char[20];
     char *dest = new char[20];
@@ -24,7 +24,6 @@ void parseRequested(JPLinkedList<Cities> &requestedList, ifstream &inFile) {
             JPString JPOrigin(origin);
             JPString JPDest(dest);
             JPString JPType(type);
-            cout << JPType << endl;
             int costBool = false;
             int timeBool = false;
             if (JPType == "C") {
@@ -33,8 +32,7 @@ void parseRequested(JPLinkedList<Cities> &requestedList, ifstream &inFile) {
                 timeBool = true;
             }
             Cities requested(JPOrigin, JPDest, costBool, timeBool);
-            requestedList.append(requested);
-
+            requestedList.push_back(requested);
         }
     }
     delete[] line;
@@ -143,30 +141,30 @@ int findHead(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, const JPString &or
     return -1;
 }
 
-void saveStack(JPLinkedList<JPLinkedList<JPString> *> &outputList, JPStack &jpStack) {
+void saveStack(JPVector<JPVector<JPString>> &outputList, JPStack &jpStack) {
     auto *jpLinkedList = new JPLinkedList(*jpStack.save());
-    outputList.insert(jpLinkedList);
+    JPVector<JPString> jpVector;
+    JPIterator<JPString> *jpIterator = jpLinkedList->getHeadIterator();
+    jpIterator->nextNode();
+    while (jpIterator->peekNextNode() != NULL) {
+        jpVector.push_back(jpIterator->nextNode()->data);
+    }
+    outputList.push_back(jpVector);
+
+    delete jpIterator;
+    delete jpLinkedList;
 }
 
-void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack &jpStack, const Cities &requested,
-                        JPLinkedList<JPLinkedList<JPString> *> &outputList) {
-    /*
-     * ITERATIVE BACKTRACKING PSEUDOCODE
-     * 1.  Push source to stack
-     * 2.  While stack not empty:
-     *
-     * 3.  Check if stack.top is dest
-     *      --Yes: store path & pop
-     *
-     *      --No:  for connection in stack.top:
-     *              is connection NULL?
-     *                  --Yes: pop stack.top & reset iter
-     *
-     *              is connection on stack?
-     *                  --Yes: continue, move iter
-     *                  --No:  push connection, jump to step 3 , move iter
-     *
-     */
+void resetAdjList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList){
+    JPAdjList.moveCurrToHead();
+    for(int i = 0; i < JPAdjList.length(); i++){
+        JPAdjList.getCurrValue()->moveCurrToHead();
+    }
+    JPAdjList.moveCurrToHead();
+}
+
+void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack & jpStack, const Cities &requested,
+                        JPVector<JPVector<JPString>> &outputList) {
     JPAdjList.moveCurrToHead();
     for (int i = 0; i < JPAdjList.length(); i++) {
         if (JPAdjList.getCurrValue()->getCurrValue().getOrigin() == requested.getOrigin()) {
@@ -178,10 +176,7 @@ void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack
     }
     JPAdjList.moveCurrToHead();
 
-    for (int i = 0; i < JPAdjList.length(); i++) {
-        JPAdjList.getCurrValue()->moveCurrToHead();
-    }
-    JPAdjList.moveCurrToHead();
+    resetAdjList(JPAdjList);
 
     while (!jpStack.isEmpty()) {
         if (jpStack.peek() == requested.getDestination()) {
@@ -206,97 +201,144 @@ void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack
     }
 }
 
-int calculateTime(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPLinkedList<JPString> &route) {
+int calculateTime(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPString> &route) {
     int total = 0;
-    JPIterator<JPString> *routeIter = route.getHeadIterator();
-    routeIter->nextNode();
-    while (routeIter->nextNode() != NULL) {
+    for (int i = 0; i < route.size() - 1; i++) {
         JPIterator<JPLinkedList<Cities> *> *AdjListBigIter = JPAdjList.getHeadIterator();
         while (AdjListBigIter->nextNode() != NULL) {
-            if (routeIter->getNode()->data == AdjListBigIter->getNode()->data->getCurrValue().getOrigin()) {
-                if (routeIter->peekNextNode()->data ==
-                    AdjListBigIter->getNode()->data->getCurrValue().getDestination()) {
-                    total = total + AdjListBigIter->getNode()->data->getCurrValue().getTime();
-                    break;
-                } else {
-                    JPIterator<Cities> *AdjListSmallIter = AdjListBigIter->getNode()->data->getHeadIterator();
-                    while (AdjListSmallIter->nextNode() != NULL) {
-                        if (routeIter->peekNextNode()->data ==
-                            AdjListBigIter->getNode()->data->getCurrValue().getDestination()) {
-                            total = total + AdjListBigIter->getNode()->data->getCurrValue().getTime();
-                            break;
-                        }
-                    }
-                    delete AdjListSmallIter;
-                    break;
+            JPIterator<Cities> *AdjListSmallerIter = AdjListBigIter->getNode()->data->getHeadIterator();
+            while (AdjListSmallerIter->nextNode() != NULL) {
+                if (route[i] == AdjListSmallerIter->getNode()->data.getOrigin() &&
+                    route[i + 1] == AdjListSmallerIter->getNode()->data.getDestination()) {
+                    total = total + AdjListSmallerIter->getNode()->data.getTime();
                 }
             }
-
+            delete AdjListSmallerIter;
         }
         delete AdjListBigIter;
     }
-    delete routeIter;
     return total;
 }
 
-int calculateCost(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPLinkedList<JPString> &route) {
+int calculateCost(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPString> &route) {
     int total = 0;
-    JPIterator<JPString> *routeIter = route.getHeadIterator();
-    routeIter->nextNode();
-    while (routeIter->nextNode() != NULL) {
+    for (int i = 0; i < route.size() - 1; i++) {
         JPIterator<JPLinkedList<Cities> *> *AdjListBigIter = JPAdjList.getHeadIterator();
         while (AdjListBigIter->nextNode() != NULL) {
-            if (routeIter->getNode()->data == AdjListBigIter->getNode()->data->getCurrValue().getOrigin()) {
-                if (routeIter->peekNextNode()->data ==
-                    AdjListBigIter->getNode()->data->getCurrValue().getDestination()) {
-                    total = total + AdjListBigIter->getNode()->data->getCurrValue().getCost();
-                    break;
-                } else {
-                    JPIterator<Cities> *AdjListSmallIter = AdjListBigIter->getNode()->data->getHeadIterator();
-                    while (AdjListSmallIter->nextNode() != NULL) {
-                        if (routeIter->peekNextNode()->data ==
-                            AdjListBigIter->getNode()->data->getCurrValue().getDestination()) {
-                            total = total + AdjListBigIter->getNode()->data->getCurrValue().getCost();
-                            break;
-                        }
-                    }
-                    delete AdjListSmallIter;
-                    break;
+            JPIterator<Cities> *AdjListSmallerIter = AdjListBigIter->getNode()->data->getHeadIterator();
+            while (AdjListSmallerIter->nextNode() != NULL) {
+                if (route[i] == AdjListSmallerIter->getNode()->data.getOrigin() &&
+                    route[i + 1] == AdjListSmallerIter->getNode()->data.getDestination()) {
+                    total = total + AdjListSmallerIter->getNode()->data.getCost();
                 }
             }
-
+            delete AdjListSmallerIter;
         }
         delete AdjListBigIter;
     }
-    delete routeIter;
     return total;
 }
 
-void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPLinkedList<Cities> &requestedRoutes,
-               JPLinkedList<JPLinkedList<JPString> *> &outputList, ofstream &outFile, JPStack &jpStack) {
-
-
-    JPIterator<Cities> *jpIterator4 = requestedRoutes.getHeadIterator();
-    while (jpIterator4->nextNode() != nullptr) {
-        iterativeBacktrack(JPAdjList, jpStack, jpIterator4->getNode()->data, outputList);
-    }
-
-    delete jpIterator4;
-
-    JPIterator<Cities> *jpIterator5 = requestedRoutes.getHeadIterator();
-    while (jpIterator5->peekNextNode() != nullptr) {
-        JPIterator<JPLinkedList<JPString> *> *jpIterator = outputList.getHeadIterator();
-        if (jpIterator->nextNode()->data->getCurrValue() == jpIterator5->getNode()->data.getOrigin()) {
-            while (jpIterator->nextNode() != nullptr) {
-                if (jpIterator->getNode()->data->getCurrValue() == jpIterator5->getNode()->data.getDestination()) {
-                    cout << calculateTime(JPAdjList, *jpIterator->getNode()->data) << endl;
-                }
+void getTopThree(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVector<JPString>> & list, Cities & requested){
+    resetAdjList(JPAdjList);
+    int first, second, third;
+    JPVector<JPString> firstList, secondList, thirdList;
+    if(list.size() < 3){
+        return;
+    }else if(requested.getTime() == 1) {
+        third = second = first = INT32_MAX;
+        for (int i = 0; i < list.size(); i++) {
+            if (calculateTime(JPAdjList, list[i]) < first) {
+                resetAdjList(JPAdjList);
+                third = second;
+                second = first;
+                first = calculateTime(JPAdjList, list[i]);
+                thirdList = secondList;
+                secondList = firstList;
+                firstList = list[i];
+            } else if (calculateTime(JPAdjList, list[i]) < second) {
+                resetAdjList(JPAdjList);
+                third = second;
+                second = calculateTime(JPAdjList, list[i]);
+                thirdList = secondList;
+                secondList = list[i];
+            } else if (calculateTime(JPAdjList, list[i]) < third) {
+                resetAdjList(JPAdjList);
+                third = calculateTime(JPAdjList, list[i]);
+                thirdList = list[i];
             }
         }
-        jpIterator5->nextNode();
-        delete jpIterator;
+    }else{
+        third = second = first = INT32_MAX;
+        for (int i = 0; i < list.size(); i++) {
+            if (calculateCost(JPAdjList, list[i]) < first) {
+                resetAdjList(JPAdjList);
+                third = second;
+                second = first;
+                first = calculateCost(JPAdjList, list[i]);
+                thirdList = secondList;
+                secondList = firstList;
+                firstList = list[i];
+            } else if (calculateCost(JPAdjList, list[i]) < second) {
+                resetAdjList(JPAdjList);
+                third = second;
+                second = calculateCost(JPAdjList, list[i]);
+                thirdList = secondList;
+                secondList = list[i];
+            } else if (calculateCost(JPAdjList, list[i]) < third) {
+                resetAdjList(JPAdjList);
+                third = calculateCost(JPAdjList, list[i]);
+                thirdList = list[i];
+            }
+        }
     }
-
-    delete jpIterator5;
-
+    resetAdjList(JPAdjList);
+    clearList(list);
+    list.push_back(firstList);
+    list.push_back(secondList);
+    list.push_back(thirdList);
 }
+
+void printToFile(ofstream& outFile, int j, JPVector<Cities> & requestedRoutes, JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVector<JPString>> &outputList){
+    outFile << "Flight " << j << ": " << requestedRoutes[0].getOrigin() << ", "
+            << requestedRoutes[0].getDestination() << endl;
+    outFile << "Requested: ";
+    for (int k = 0; k < outputList[j].size() - 1; k++) {
+        outFile << outputList[j][k] << " -> ";
+    }
+    outFile << outputList[j][outputList[j].size() - 1];
+    outFile << ". Time: " << calculateTime(JPAdjList, outputList[j]);
+    resetAdjList(JPAdjList);
+    outFile << " Cost: " << calculateCost(JPAdjList, outputList[j]) << endl;
+    resetAdjList(JPAdjList);
+}
+
+void clearList(JPVector<JPVector<JPString>> &outputList){
+    int j = outputList.size();
+    for(int i = 0; i < j; i++){
+        outputList.pop_back();
+    }
+}
+
+void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<Cities> &requestedRoutes, JPVector<JPVector<JPString>> &outputList, ofstream &outFile, JPStack & jpStack, ifstream & data) {
+    for(int i = 0; i < requestedRoutes.size(); i++) {
+        iterativeBacktrack(JPAdjList, jpStack, requestedRoutes[i], outputList);
+        resetAdjList(JPAdjList);
+        getTopThree(JPAdjList, outputList, requestedRoutes[i]);
+        for (int j = 0; j < outputList.size(); j++) {
+            printToFile(outFile, j, requestedRoutes, JPAdjList, outputList);
+            resetAdjList(JPAdjList);
+        }
+        clearList(outputList);
+        JPAdjList.clear();
+        parseInputFile(JPAdjList, data);
+        resetAdjList(JPAdjList);
+    }
+}
+
+//loop through requested routes
+//  iterativeBacktrack(requestedRoutes[i])
+//  resetAdjList
+//  getTopThree(outputList);
+//  print top three from outputList
+//  clear outputList

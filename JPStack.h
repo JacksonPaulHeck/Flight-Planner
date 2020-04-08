@@ -10,8 +10,8 @@
 
 class JPStack {
 private:
-    JPLinkedList<JPString> *data;
     int size;
+    JPLinkedList<JPString> *data;
 public:
     JPStack() {
         data = new JPLinkedList<JPString>;
@@ -79,6 +79,7 @@ public:
     JPLinkedList<JPString>* & save(){
         return data;
     }
+
 };
 
 
