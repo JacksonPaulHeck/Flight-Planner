@@ -17,9 +17,9 @@ set(input02 "input.txt")
 ##########################################
 
 # Copy data files to build dir
-foreach(file IN LISTS input01 input02 input03 input04)
+foreach(file IN LISTS input01 input02)
     configure_file(${file} ${file} COPYONLY)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp JPString.cpp Driver.cpp)
+add_executable(${EXE_NAME} main.cpp JPString.cpp Driver.cpp, test.cpp)
