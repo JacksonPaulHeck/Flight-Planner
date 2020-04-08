@@ -1,15 +1,13 @@
 //
 // Created by JP Heck on 3/27/2020.
 //
-
-#ifndef S20_PA04_FLIGHTPLANNER_DRIVER_H
-#define S20_PA04_FLIGHTPLANNER_DRIVER_H
-
 #include "JPStack.h"
-#include "JPLinkedList.h"
 #include "JPIterator.h"
 #include "Cities.h"
 #include "JPVector.h"
+
+#ifndef S20_PA04_FLIGHTPLANNER_DRIVER_H
+#define S20_PA04_FLIGHTPLANNER_DRIVER_H
 
 using namespace std;
 
