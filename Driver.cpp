@@ -168,8 +168,6 @@ void resetAdjList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList){
 
 void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack & jpStack, const Cities &requested,
                         JPVector<JPVector<JPString>> &outputList) {
-
-    cout << JPAdjList.length() << endl;
     JPAdjList.moveCurrToHead();
     for (int i = 0; i < JPAdjList.length(); i++) {
         if (JPAdjList.getCurrValue()->getCurrValue().getOrigin() == requested.getOrigin()) {
@@ -335,12 +333,6 @@ void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<Cities>
         }
         iterativeBacktrack(JPAdjList, jpStack, requestedRoutes[i], outputList);
         resetAdjList(JPAdjList);
-        for(int j = 0; j < outputList.size(); j++){
-            for(int k = 0; k < outputList[j].size(); k++){
-                cout << outputList[j][k] << "-->";
-            }
-            cout << "|" << endl;
-        }
         getTopThree(JPAdjList, outputList, requestedRoutes[i]);
         outFile << "Flight " << i+1 << ": " << requestedRoutes[i].getDestination() << ", " << requestedRoutes[i].getOrigin() << " (" << type << ")" << endl;
         for (int j = 0; j < outputList.size(); j++) {
