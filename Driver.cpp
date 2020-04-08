@@ -19,21 +19,22 @@ void parseRequested(JPVector<Cities> &requestedList, ifstream &inFile) {
         while (!ss.eof()) {
             ss.getline(origin, 20, '|');
             ss.getline(dest, 20, '|');
-            ss.getline(type, 20);
-
+            ss.getline(type, 20, '\r');
 
             JPString JPOrigin(origin);
             JPString JPDest(dest);
             JPString JPType(type);
-            int costBool = false;
-            int timeBool = false;
+            int costBool = 0;
+            int timeBool = 0;
             if (JPType == "C") {
-                costBool = true;
+                costBool = 1;
             } else {
-                timeBool = true;
+                timeBool = 1;
             }
-            Cities requested(JPOrigin, JPDest, costBool, timeBool);
-            requestedList.push_back(requested);
+            Cities requested(JPDest, JPOrigin, costBool, timeBool);
+            if(requested.getOrigin() != JPString() && requested.getDestination() != JPString()) {
+                requestedList.push_back(requested);
+            }
         }
     }
     delete[] line;
@@ -304,7 +305,7 @@ void getTopThree(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVec
 }
 
 void printToFile(ofstream& outFile, int j, JPVector<Cities> & requestedRoutes, JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVector<JPString>> &outputList){
-    outFile << "Path " << j << ": ";
+    outFile << "Path " << j+1 << ": ";
     for (int k = 0; k < outputList[j].size() - 1; k++) {
         outFile << outputList[j][k] << " -> ";
     }
@@ -341,23 +342,15 @@ void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<Cities>
             cout << "|" << endl;
         }
         getTopThree(JPAdjList, outputList, requestedRoutes[i]);
-        outFile << "Flight " << i << ": " << requestedRoutes[i].getOrigin() << ", " << requestedRoutes[i].getDestination() << " (" << type << ")" << endl;
+        outFile << "Flight " << i+1 << ": " << requestedRoutes[i].getDestination() << ", " << requestedRoutes[i].getOrigin() << " (" << type << ")" << endl;
         for (int j = 0; j < outputList.size(); j++) {
             printToFile(outFile, j, requestedRoutes, JPAdjList, outputList);
             resetAdjList(JPAdjList);
         }
+        outFile << endl;
         clearList(outputList);
         JPAdjList.clear();
         parseInputFile(JPAdjList, data);
         resetAdjList(JPAdjList);
     }
-    deleteAdjList(JPAdjList);
-}
-
-void deleteAdjList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList){
-    JPIterator<JPLinkedList<Cities> *> *AdjListBigIter = JPAdjList.getTailIterator();
-    while (AdjListBigIter->previousNode() != NULL) {
-        delete AdjListBigIter->nextNode()->data;
-    }
-    delete AdjListBigIter;
 }

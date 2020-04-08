@@ -1,0 +1,10 @@
+9
+Fayetteville|Dallas|C
+Chicago|Dallas|T
+Austin|Houston|C
+Dallas|Denver|C
+Atlanta|Chicago|T
+Atlanta|Denver|C
+Fayetteville|Denver|T
+Houston|Atlanta|T
+Dallas|Atlanta|C

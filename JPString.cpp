@@ -101,7 +101,7 @@ bool operator==(const JPString &jpString, const JPString &jpString1) {
 
 //Equality Comparison Operator
 bool operator==(const JPString &jpString, const char *jpString1) {
-    return strcmp(jpString.data, jpString1);
+    return strcmp(jpString.data, jpString1) == 0;
 }
 
 //Anti-Equality Comparison Operator

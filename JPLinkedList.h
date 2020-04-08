@@ -47,7 +47,6 @@ public:
     }
 
     JPLinkedList<T> & operator=(JPLinkedList<T> const & listToCopy){
-        init();
         if(!listToCopy.isEmpty()) {
             JPNode<T>* copyCurr = listToCopy.head;
             while(copyCurr != NULL){
@@ -89,11 +88,11 @@ public:
         return it;
     }
 
-    void moveCurrToHead() {
+    void moveCurrToHead(){
         curr = head;
     }
 
-    bool isEmpty(){
+    [[nodiscard]] bool isEmpty() const{
         return head->next == nullptr;
     }
 
