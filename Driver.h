@@ -43,4 +43,6 @@ void getTopThree(JPLinkedList<JPLinkedList<Cities> *> &, JPVector<JPVector<JPStr
 
 void clearList(JPVector<JPVector<JPString>> &);
 
+void deleteAdjList(JPLinkedList<JPLinkedList<Cities> *> &);
+
 #endif //S20_PA04_FLIGHTPLANNER_DRIVER_H

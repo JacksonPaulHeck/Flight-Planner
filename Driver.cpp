@@ -21,6 +21,7 @@ void parseRequested(JPVector<Cities> &requestedList, ifstream &inFile) {
             ss.getline(dest, 20, '|');
             ss.getline(type, 20);
 
+
             JPString JPOrigin(origin);
             JPString JPDest(dest);
             JPString JPType(type);
@@ -39,10 +40,11 @@ void parseRequested(JPVector<Cities> &requestedList, ifstream &inFile) {
     delete[] origin;
     delete[] dest;
     delete[] type;
-
 }
 
 void parseInputFile(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, ifstream &inFile) {
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
     char *line = new char[80];
     char *origin = new char[20];
     char *dest = new char[20];
@@ -165,6 +167,8 @@ void resetAdjList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList){
 
 void iterativeBacktrack(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPStack & jpStack, const Cities &requested,
                         JPVector<JPVector<JPString>> &outputList) {
+
+    cout << JPAdjList.length() << endl;
     JPAdjList.moveCurrToHead();
     for (int i = 0; i < JPAdjList.length(); i++) {
         if (JPAdjList.getCurrValue()->getCurrValue().getOrigin() == requested.getOrigin()) {
@@ -300,9 +304,7 @@ void getTopThree(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVec
 }
 
 void printToFile(ofstream& outFile, int j, JPVector<Cities> & requestedRoutes, JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<JPVector<JPString>> &outputList){
-    outFile << "Flight " << j << ": " << requestedRoutes[0].getOrigin() << ", "
-            << requestedRoutes[0].getDestination() << endl;
-    outFile << "Requested: ";
+    outFile << "Path " << j << ": ";
     for (int k = 0; k < outputList[j].size() - 1; k++) {
         outFile << outputList[j][k] << " -> ";
     }
@@ -321,10 +323,25 @@ void clearList(JPVector<JPVector<JPString>> &outputList){
 }
 
 void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<Cities> &requestedRoutes, JPVector<JPVector<JPString>> &outputList, ofstream &outFile, JPStack & jpStack, ifstream & data) {
+
+    JPString type;
+
     for(int i = 0; i < requestedRoutes.size(); i++) {
+        if(requestedRoutes[i].getCost() == 1){
+            type = "Cost";
+        }else{
+            type = "Time";
+        }
         iterativeBacktrack(JPAdjList, jpStack, requestedRoutes[i], outputList);
         resetAdjList(JPAdjList);
+        for(int j = 0; j < outputList.size(); j++){
+            for(int k = 0; k < outputList[j].size(); k++){
+                cout << outputList[j][k] << "-->";
+            }
+            cout << "|" << endl;
+        }
         getTopThree(JPAdjList, outputList, requestedRoutes[i]);
+        outFile << "Flight " << i << ": " << requestedRoutes[i].getOrigin() << ", " << requestedRoutes[i].getDestination() << " (" << type << ")" << endl;
         for (int j = 0; j < outputList.size(); j++) {
             printToFile(outFile, j, requestedRoutes, JPAdjList, outputList);
             resetAdjList(JPAdjList);
@@ -334,11 +351,13 @@ void getOutput(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, JPVector<Cities>
         parseInputFile(JPAdjList, data);
         resetAdjList(JPAdjList);
     }
+    deleteAdjList(JPAdjList);
 }
 
-//loop through requested routes
-//  iterativeBacktrack(requestedRoutes[i])
-//  resetAdjList
-//  getTopThree(outputList);
-//  print top three from outputList
-//  clear outputList
+void deleteAdjList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList){
+    JPIterator<JPLinkedList<Cities> *> *AdjListBigIter = JPAdjList.getTailIterator();
+    while (AdjListBigIter->previousNode() != NULL) {
+        delete AdjListBigIter->nextNode()->data;
+    }
+    delete AdjListBigIter;
+}
