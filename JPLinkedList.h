@@ -149,7 +149,7 @@ public:
 
 
     bool contains(const T& requested){
-        JPNode<T> tp = head->next;
+        JPNode<T>* tp = head->next;
         while(tp != NULL){
             if(tp->data == requested){
                 return true;

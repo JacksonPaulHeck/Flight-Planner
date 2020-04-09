@@ -5,6 +5,7 @@
 #include "catch.hpp"
 #include "JPStack.h"
 
+
 TEST_CASE("JPLinkedList Testing"){
     SECTION("JPLinkedList Test"){
         JPLinkedList<int> jpLinkedList;
