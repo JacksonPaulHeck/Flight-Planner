@@ -6,32 +6,6 @@
 #include "JPStack.h"
 #include "JPIterator.h"
 
-TEST_CASE("JPLinkedList Testing") {
-    //Empty Constructor
-    //Copy Constructor
-    //Assignment Operator
-    //print
-    //clear
-    //insert
-    //append
-    //remove
-    //moveCurrToHead
-    //isEmpty
-    //moveCurrToTail
-    //moveCurrToLeft
-    //moveCurrToRight
-    //length
-    //getHeadIterator
-    //getTailIterator
-    //getCurrValue
-    //getCurrNextNode
-    //getCurrNode
-    //contains
-    SECTION("Empty Constructor Initializes head, curr, and tail") {
-
-    }
-}
-
 TEST_CASE("JPStack Testing") {
     JPString jpString("JPString");
     SECTION("Empty Constructor and isEmpty") {
