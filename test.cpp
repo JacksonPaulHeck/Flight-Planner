@@ -4,7 +4,29 @@
 
 #include "catch.hpp"
 #include "JPStack.h"
-#include "JPIterator.h"
+
+TEST_CASE("JPLinkedList Testing") {
+    //Empty Constructor
+    //Copy Constructor
+    //Assignment Operator
+    //print
+    //clear
+    //insert
+    //append
+    //remove
+    //moveCurrToHead
+    //isEmpty
+    //moveCurrToTail
+    //moveCurrToLeft
+    //moveCurrToRight
+    //length
+    //getHeadIterator
+    //getTailIterator
+    //getCurrValue
+    //getCurrNextNode
+    //getCurrNode
+    //contains
+}
 
 TEST_CASE("JPStack Testing") {
     JPString jpString("JPString");
