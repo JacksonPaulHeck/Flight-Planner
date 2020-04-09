@@ -5,6 +5,8 @@
 #include "catch.hpp"
 #include "JPStack.h"
 
+TEST_CASE("JPLinkedList Testing") {}
+
 TEST_CASE("JPStack Testing") {
     JPString jpString("JPString");
     SECTION("Empty Constructor and isEmpty") {
