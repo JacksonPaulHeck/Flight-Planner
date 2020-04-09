@@ -9,6 +9,8 @@
 
 TEST_CASE("JPString Testing") {
     SECTION("JPString can be created from char*, JPString, and empty constructor; Equality operators") {
+        char* str = new char[8];
+        str = "JPString";
         auto *jpString = new JPString();
         REQUIRE(jpString->size() == 0);
 
@@ -20,12 +22,14 @@ TEST_CASE("JPString Testing") {
 
         *jpString = *jpString2;
 
-        REQUIRE(*jpString1 == "JPString");
-        REQUIRE(*jpString2 == "JPString");
+        REQUIRE(*jpString == str);
+        REQUIRE(*jpString1 == str);
+        REQUIRE(*jpString2 == str);
         REQUIRE(*jpString == *jpString1);
         REQUIRE(*jpString2 == *jpString);
         REQUIRE(*jpString1 == *jpString2);
 
+        delete[] str;
         delete jpString;
         delete jpString1;
         delete jpString2;
