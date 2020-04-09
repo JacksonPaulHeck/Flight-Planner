@@ -20,7 +20,6 @@ TEST_CASE("JPString Testing") {
 
         *jpString = *jpString2;
 
-        REQUIRE(*jpString == "JPString");
         REQUIRE(*jpString1 == "JPString");
         REQUIRE(*jpString2 == "JPString");
         REQUIRE(*jpString == *jpString1);
