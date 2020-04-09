@@ -58,8 +58,6 @@ public:
             node = node->next;
         }
     }
-
-
 };
 
 #endif //S20_PA04_FLIGHTPLANNER_JPITERATOR_H

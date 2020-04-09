@@ -79,8 +79,6 @@ public:
     JPLinkedList<JPString>* & save(){
         return data;
     }
-
 };
-
 
 #endif //S20_PA04_FLIGHTPLANNER_JPSTACK_H

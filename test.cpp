@@ -107,7 +107,7 @@ TEST_CASE("JPString Testing") {
         delete jpString13;
     }SECTION("Size function") {
         //    int size() const;
-        auto* jpString14 = new JPString("asdfghjklqwertyuiop");
+        auto *jpString14 = new JPString("asdfghjklqwertyuiop");
 
         REQUIRE(jpString14->size() == 19);
 
@@ -116,8 +116,8 @@ TEST_CASE("JPString Testing") {
 
     SECTION("Lowercase function") {
 //    JPString & lowercase();
-        auto* jpString15 = new JPString("JPStringThatIS234NOtCased..-+INAN//orMalFormat123./!");
-        auto* jpString16 = new JPString();
+        auto *jpString15 = new JPString("JPStringThatIS234NOtCased..-+INAN//orMalFormat123./!");
+        auto *jpString16 = new JPString();
         *jpString16 = jpString15->lowercase();
 
         REQUIRE(*jpString16 == "jpstringthatis234notcased..-+inan//ormalformat123./!");
@@ -125,8 +125,6 @@ TEST_CASE("JPString Testing") {
         delete jpString15;
         delete jpString16;
     }
-
-
 }
 
 TEST_CASE("JPVector Testing") {
@@ -140,14 +138,12 @@ TEST_CASE("JPVector Testing") {
         jpVector->push_back(6);
         REQUIRE(jpVector->size() == 6);
         REQUIRE(jpVector->max_size() >= 6);
-    }
-    SECTION("Create JPVector from size constructor") {
+    }SECTION("Create JPVector from size constructor") {
         auto *jpVector1 = new JPVector<int>(5);
         REQUIRE(jpVector1->size() == 5);
         REQUIRE(jpVector1->max_size() >= 5);
         delete jpVector1;
-    }
-    SECTION("JPVector can throw exception for out of bounds") {
+    }SECTION("JPVector can throw exception for out of bounds") {
         auto *jpVector2 = new JPVector<char>();
         jpVector2->push_back('J');
         jpVector2->push_back('P');
@@ -157,8 +153,7 @@ TEST_CASE("JPVector Testing") {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
         delete jpVector2;
-    }
-    SECTION("JPVector can be created through copy constructor") {
+    }SECTION("JPVector can be created through copy constructor") {
         jpVector->push_back(0);
         jpVector->push_back(1);
         jpVector->push_back(2);
@@ -178,8 +173,7 @@ TEST_CASE("JPVector Testing") {
         } catch (exception &e) {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
-    }
-    SECTION("JPVector assignment operator") {
+    }SECTION("JPVector assignment operator") {
         auto *jpVector4 = new JPVector<int>();
         auto *jpVector5 = new JPVector<int>();
 
@@ -197,8 +191,7 @@ TEST_CASE("JPVector Testing") {
         }
         delete jpVector4;
         delete jpVector5;
-    }
-    SECTION("JPVector push_back function") {
+    }SECTION("JPVector push_back function") {
         auto *jpVector6 = new JPVector<int>();
         jpVector6->push_back(100);
         REQUIRE(jpVector6->size() == 1);
@@ -209,8 +202,7 @@ TEST_CASE("JPVector Testing") {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
         delete jpVector6;
-    }
-    SECTION("JPVector pop_back function") {
+    }SECTION("JPVector pop_back function") {
         auto *jpVector7 = new JPVector<int>();
         jpVector7->push_back(100);
         jpVector7->push_back(200);
@@ -225,26 +217,76 @@ TEST_CASE("JPVector Testing") {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
         delete jpVector7;
-    }
-    SECTION("JPVector operator[]") {
+    }SECTION("JPVector operator[]") {
         auto *jpVector8 = new JPVector<int>();
         jpVector8->push_back(100);
+        jpVector8->push_back(200);
+        jpVector8->push_back(0);
+        jpVector8->push_back(-100);
         try {
             REQUIRE(jpVector8->operator[](0) == 100);
+            REQUIRE(jpVector8->operator[](1) == 200);
+            REQUIRE(jpVector8->operator[](2) == 0);
+            REQUIRE(jpVector8->operator[](3) == -100);
         } catch (exception &e) {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
         delete jpVector8;
-    }
-    SECTION("JPVector at function") {
+    }SECTION("JPVector at function") {
         auto *jpVector8 = new JPVector<int>();
         jpVector8->push_back(100);
+        jpVector8->push_back(200);
+        jpVector8->push_back(0);
+        jpVector8->push_back(-100);
         try {
             REQUIRE(jpVector8->at(0) == 100);
+            REQUIRE(jpVector8->at(1) == 200);
+            REQUIRE(jpVector8->at(2) == 0);
+            REQUIRE(jpVector8->at(3) == -100);
         } catch (exception &e) {
             REQUIRE(strcmp(e.what(), "Index is out of range for JPVector!") == 0);
         }
         delete jpVector8;
     }
     delete jpVector;
+}
+
+TEST_CASE("JPLinkedList Testing") {
+    //Empty Constructor
+    //Copy Constructor
+    //Assignment Operator
+    //print
+    //clear
+    //insert
+    //append
+    //remove
+    //moveCurrToHead
+    //isEmpty
+    //moveCurrToTail
+    //moveCurrToLeft
+    //moveCurrToRight
+    //length
+    //getHeadIterator
+    //getTailIterator
+    //getCurrValue
+    //getCurrNextNode
+    //getCurrNode
+    //contains
+    SECTION("Empty Constructor Initializes head, curr, and tail") {
+
+    }
+}
+
+TEST_CASE("JPStack Testing") {
+    //Empty Constructor
+    //isEmpty
+    //clear
+    //push
+    //pop
+    //peek
+    //length
+    //print
+    //contains
+    //save
+    SECTION("") {}
 }
