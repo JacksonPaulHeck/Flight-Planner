@@ -30,6 +30,7 @@ public:
         data->clear();
         size = data->length();
         delete data;
+        data->init();
     }
 
     void push(const JPString &it) {
