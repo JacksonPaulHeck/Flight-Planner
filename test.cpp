@@ -5,7 +5,7 @@
 #include "catch.hpp"
 #include "JPStack.h"
 
-TEST_CASE("JPLinkedList Testing") {}
+//Tests for JPStack
 
 TEST_CASE("JPStack Testing") {
     JPString jpString("JPString");
