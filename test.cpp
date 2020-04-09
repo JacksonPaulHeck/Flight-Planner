@@ -288,5 +288,16 @@ TEST_CASE("JPStack Testing") {
     //print
     //contains
     //save
-    SECTION("") {}
+    JPString jpString("JPString");
+    SECTION("Empty Constructor and isEmpty") {
+        JPStack jpStack;
+        REQUIRE(jpStack.isEmpty());
+    }
+    SECTION("Clear Function"){
+        JPStack jpStack;
+        jpStack.push(jpString);
+        jpStack.push(jpString);
+        jpStack.clear();
+        REQUIRE(jpStack.isEmpty());
+    }
 }
