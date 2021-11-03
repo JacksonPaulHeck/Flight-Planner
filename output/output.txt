@@ -1,0 +1,41 @@
+Flight 1: Fayetteville, Dallas (Cost)
+Path 1: Fayetteville -> Dallas. Time: 90 Cost: 90
+Path 2: Fayetteville -> Houston -> Austin -> Dallas. Time: 518 Cost: 316
+Path 3: Fayetteville -> Atlanta -> Chicago -> Austin -> Dallas. Time: 797 Cost: 545
+
+Flight 2: Chicago, Dallas (Time)
+Path 1: Chicago -> Dallas. Time: 14 Cost: 10
+Path 2: Chicago -> Austin -> Dallas. Time: 239 Cost: 242
+Path 3: Chicago -> Atlanta -> Fayetteville -> Houston -> Austin -> Dallas. Time: 1076 Cost: 619
+
+Flight 3: Austin, Houston (Cost)
+Path 1: Austin -> Houston. Time: 39 Cost: 95
+Path 2: Austin -> Dallas -> Chicago -> Atlanta -> Fayetteville -> Houston. Time: 1051 Cost: 534
+Path 3: Austin -> Chicago -> Atlanta -> Fayetteville -> Houston. Time: 1182 Cost: 570
+
+Flight 4: Dallas, Denver (Cost)
+Path 1: Dallas -> Denver. Time: 143 Cost: 32
+
+Flight 5: Atlanta, Chicago (Time)
+Path 1: Atlanta -> Fayetteville -> Dallas -> Austin -> Chicago. Time: 409 Cost: 532
+Path 2: Atlanta -> Chicago. Time: 478 Cost: 103
+
+Flight 6: Atlanta, Denver (Cost)
+Path 1: Atlanta -> Dallas -> Denver. Time: 143 Cost: 32
+Path 2: Atlanta -> Austin -> Dallas -> Denver. Time: 190 Cost: 130
+Path 3: Atlanta -> Chicago -> Austin -> Dallas -> Denver. Time: 860 Cost: 377
+
+Flight 7: Fayetteville, Denver (Time)
+Path 1: Fayetteville -> Dallas -> Denver. Time: 233 Cost: 122
+Path 2: Fayetteville -> Houston -> Austin -> Dallas -> Denver. Time: 661 Cost: 348
+Path 3: Fayetteville -> Atlanta -> Chicago -> Austin -> Dallas -> Denver. Time: 940 Cost: 577
+
+Flight 8: Houston, Atlanta (Time)
+Path 1: Houston -> Fayetteville -> Atlanta. Time: 512 Cost: 323
+Path 2: Houston -> Austin -> Dallas -> Fayetteville -> Atlanta. Time: 256 Cost: 483
+
+Flight 9: Dallas, Atlanta (Cost)
+Path 1: Dallas -> Fayetteville -> Atlanta. Time: 170 Cost: 290
+Path 2: Dallas -> Austin -> Houston -> Fayetteville -> Atlanta. Time: 598 Cost: 516
+Path 3: Dallas -> Chicago -> Austin -> Houston -> Fayetteville -> Atlanta. Time: 757 Cost: 572
+

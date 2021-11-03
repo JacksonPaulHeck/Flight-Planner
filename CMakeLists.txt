@@ -11,8 +11,8 @@ set (EXE_NAME FlightPlanner)
 #   set (input02 "train_target.csv")
 # etc....
 
-set (input01 "data.txt")
-set(input02 "input.txt")
+set (input01 "input/data.txt")
+set(input02 "input/input.txt")
 #
 ##########################################
 
@@ -22,4 +22,4 @@ foreach(file IN LISTS input01 input02)
 endforeach()
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(${EXE_NAME} main.cpp JPString.cpp Driver.cpp test.cpp)
+add_executable(${EXE_NAME} src/main.cpp src/JPString.cpp src/Driver.cpp src/test.cpp)
