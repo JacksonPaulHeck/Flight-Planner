@@ -3,7 +3,7 @@
 //
 
 #include "catch.hpp"
-#include "JPStack.h"
+#include "../src/JPStack.h"
 
 
 TEST_CASE("JPLinkedList Testing"){
