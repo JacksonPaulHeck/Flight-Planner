@@ -123,6 +123,7 @@ void emptyList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, Cities &cities1,
     jpLinkedList1->moveCurrToHead();
     jpLinkedList1->insert(cities2);
     JPAdjList.append(jpLinkedList1);
+
 }
 
 void searchInList(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, Cities &head, bool &isThere) {
@@ -174,7 +175,7 @@ int findHead(JPLinkedList<JPLinkedList<Cities> *> &JPAdjList, const JPString &or
 
 void saveStack(JPVector<JPVector<JPString>> &outputList, JPStack &jpStack) {
     //creates a new Linked list from the jpstack
-    auto *jpLinkedList = new JPLinkedList(*jpStack.save());
+    auto *jpLinkedList = new JPLinkedList<JPString>(*jpStack.save());
     JPVector<JPString> jpVector;
     JPIterator<JPString> *jpIterator = jpLinkedList->getHeadIterator();
     jpIterator->nextNode();

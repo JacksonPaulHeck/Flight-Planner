@@ -19,7 +19,7 @@ public:
     }
 
     ~JPStack() {
-        clear();
+        delete data;
     }
 
     bool isEmpty(){
@@ -27,10 +27,11 @@ public:
     }
 
     void clear() {
-        data->clear();
-        size = data->length();
+        // data->clear();
+        // size = data->length();
         delete data;
-        data->init();
+        data = new JPLinkedList<JPString>;
+        size=data->length();
     }
 
     void push(const JPString &it) {
