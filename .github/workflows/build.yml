@@ -56,7 +56,7 @@ jobs:
       - name: Run the project
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: valgrind --leak-check=yes ./$EXE_NAME $INPUT_FILES $OUTPUT_FILES
+        run: ./$EXE_NAME $INPUT_FILES $OUTPUT_FILES
 
       - name: Run Catch tests
         working-directory: ${{runner.workspace}}/build
