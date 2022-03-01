@@ -5,10 +5,6 @@ on: [push]
 env:
   EXE_NAME: FlightPlanner
   BUILD_TYPE: Release
-  ### ***** Students!  Put the name of the input files and output files here.
-  ###   List them in the order that they need to appear in Argv param of main.
-  ###   Output Files will follow input files
-  ###   Note: These should be the actual names of the files.  No double quotes
   INPUT_FILES: input/data.txt input/input.txt
   OUTPUT_FILES: output/output.txt
 
