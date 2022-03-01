@@ -1,16 +1,10 @@
-#define CATCH_CONFIG_RUNNER
 
-#include "../test/catch.hpp"
 #include <iostream>
 #include "Driver.h"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-    if(argc <= 1){
-        Catch::Session().run();
-        return 0;
-    }
     ifstream data(argv[1]);     //data file
     ifstream input(argv[2]);    //input cities file
     ofstream output(argv[3]);   //output file
